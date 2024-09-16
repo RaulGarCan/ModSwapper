@@ -45,10 +45,12 @@ public class Main {
     public static void loadMods(String path, File folderToLoad, ArrayList<ModLoaderThread> remainingThreads){
         emptyModsFolder(path);
         for(File f : folderToLoad.listFiles()){
-            ModLoaderThread thread = new ModLoaderThread(path, f);
-            remainingThreads.add(thread);
-            thread.addRemainingThreads(remainingThreads);
-            thread.start();
+            if(f.getName().split("\\.")[f.getName().split("\\.").length-1].equalsIgnoreCase("jar")){
+                ModLoaderThread thread = new ModLoaderThread(path, f);
+                remainingThreads.add(thread);
+                thread.addRemainingThreads(remainingThreads);
+                thread.start();
+            }
         }
         saveCurrentFolder(path, folderToLoad.getName());
     }
