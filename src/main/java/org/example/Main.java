@@ -20,6 +20,7 @@ public class Main {
                 System.out.println();
                 System.out.println("0) Exit");
                 ArrayList<File> foldersOptions = displayMenu(path);
+                System.out.println("Current Mods Loaded: "+getCurrentFolder(path));
                 System.out.print("\nChoose an option: ");
                 String option = userInput.nextLine().strip();
                 if(option.equalsIgnoreCase("0")){
@@ -48,6 +49,28 @@ public class Main {
             remainingThreads.add(thread);
             thread.addRemainingThreads(remainingThreads);
             thread.start();
+        }
+        saveCurrentFolder(path, folderToLoad.getName());
+    }
+    public static void saveCurrentFolder(String path, String folderName){
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(path+"/.swapData.txt"));
+            writer.write(folderName);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public static String getCurrentFolder(String path){
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path+"/.swapData.txt"));
+            String s = reader.readLine();
+            if(s==null || s.isBlank()){
+                return "[Unknown]";
+            }
+            return s;
+        } catch (IOException e) {
+            return "[Not Found]";
         }
     }
     public static void emptyModsFolder(String path){
